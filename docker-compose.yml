@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysq-salesapi
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:3306"
