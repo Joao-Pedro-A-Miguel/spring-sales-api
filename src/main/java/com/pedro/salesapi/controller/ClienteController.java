@@ -21,7 +21,7 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<Cliente> salvar(@RequestBody @Valid Cliente cliente) {
-        return ResponseEntity.ok(service.salvar(cliente)); // 🔥 padrão profissional
+        return ResponseEntity.ok(service.salvar(cliente));
     }
 
     @GetMapping

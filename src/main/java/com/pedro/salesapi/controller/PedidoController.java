@@ -22,7 +22,7 @@ public class PedidoController {
     @PostMapping
     public ResponseEntity<PedidoResponseDTO> salvar(@RequestBody Pedidos pedido){
         Pedidos salvo = pedidoService.salvar(pedido);
-        return ResponseEntity.ok(pedidoService.converter(salvo)); // 🔥 retorna DTO
+        return ResponseEntity.ok(pedidoService.converter(salvo));
     }
 
     @GetMapping
