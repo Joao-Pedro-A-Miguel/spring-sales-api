@@ -4,7 +4,7 @@ API REST desenvolvida com **Spring Boot** para gerenciamento de um sistema de ve
 
 ---
 
-## 📌 Sobre o projeto
+## Sobre o projeto
 
 Este projeto simula um sistema de vendas real, permitindo operações completas de CRUD e relacionamento entre entidades.
 
@@ -12,7 +12,7 @@ A aplicação foi construída seguindo práticas de desenvolvimento backend, com
 
 ---
 
-## 🎯 Funcionalidades
+## Funcionalidades
 
 ✔ Cadastro de clientes
 ✔ Cadastro de produtos
@@ -24,7 +24,7 @@ A aplicação foi construída seguindo práticas de desenvolvimento backend, com
 
 ---
 
-## 🧱 Arquitetura
+## Arquitetura
 
 O projeto segue uma arquitetura em camadas:
 
@@ -37,7 +37,7 @@ entity → representação das tabelas
 
 ---
 
-## 🚀 Tecnologias utilizadas
+## Tecnologias utilizadas
 
 * Java 17
 * Spring Boot
@@ -49,7 +49,7 @@ entity → representação das tabelas
 
 ---
 
-## ⚙️ Como rodar o projeto
+## Como rodar o projeto
 
 ### 🔹 1. Clonar o repositório
 
@@ -95,7 +95,7 @@ mvn spring-boot:run
 
 ---
 
-## 🔐 Segurança
+## Segurança
 
 O projeto utiliza variáveis de ambiente para proteger dados sensíveis como credenciais do banco de dados.
 
@@ -104,37 +104,37 @@ O projeto utiliza variáveis de ambiente para proteger dados sensíveis como cre
 
 ---
 
-## 📡 Endpoints da API
+## Endpoints da API
 
-### 👤 Clientes
+### Clientes
 
 * `GET /clientes` → Lista todos os clientes
 * `POST /clientes` → Cadastra um novo cliente
 
 ---
 
-### 📦 Produtos
+### Produtos
 
 * `GET /produtos` → Lista todos os produtos
 * `POST /produtos` → Cadastra um novo produto
 
 ---
 
-### 🧾 Pedidos
+### Pedidos
 
 * `GET /pedidos` → Lista todos os pedidos
 * `POST /pedidos` → Cria um novo pedido
 
 ---
 
-### 📦 Itens do Pedido
+### Itens do Pedido
 
 * Associação entre pedidos e produtos
 * Controle de quantidade e preço por item
 
 ---
 
-## 🗄️ Banco de dados
+## Banco de dados
 
 O sistema utiliza MySQL com as seguintes entidades principais:
 
@@ -151,7 +151,7 @@ Relacionamentos:
 
 ---
 
-## 📁 Estrutura do projeto
+## Estrutura do projeto
 
 ```
 src/main/java/com/pedro/salesapi
@@ -165,7 +165,7 @@ dto/
 
 ---
 
-## 💡 Boas práticas aplicadas
+## Boas práticas aplicadas
 
 ✔ Separação em camadas
 ✔ Uso de DTOs
@@ -175,7 +175,7 @@ dto/
 
 ---
 
-## 🚀 Melhorias futuras
+## Melhorias futuras
 
 * Validação com Bean Validation
 * Tratamento global de exceções (@ControllerAdvice)
@@ -185,15 +185,13 @@ dto/
 
 ---
 
-## 👨‍💻 Autor
+## Autor
 
 **João Pedro**
 
 ---
 
-## 📬 Contato
-
-Se quiser trocar ideia sobre o projeto ou oportunidades:
+## Contato
 
 * GitHub: https://github.com/Joao-Pedro-A-Miguel
 
