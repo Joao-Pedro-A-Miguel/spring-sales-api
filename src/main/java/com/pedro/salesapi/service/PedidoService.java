@@ -1,11 +1,13 @@
 package com.pedro.salesapi.service;
 
-import com.pedro.salesapi.Exception.RegraNegocioException;
+import com.pedro.salesapi.dto.PedidoResponseDTO;
+import com.pedro.salesapi.exception.RegraNegocioException;
 import com.pedro.salesapi.entity.*;
 import com.pedro.salesapi.repository.ClienteRepository;
 import com.pedro.salesapi.repository.PedidoRepository;
 import com.pedro.salesapi.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,7 +25,8 @@ public class PedidoService {
         this.clienteRepository = clienteRepository;
     }
 
-    public Pedidos salvar(Pedidos pedido){
+    @Transactional
+    public Pedido salvar(Pedido pedido){
 
         if (pedido == null) {
             throw new RegraNegocioException("Pedido não pode ser nulo");
@@ -49,6 +52,10 @@ public class PedidoService {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
                     .orElseThrow(() -> new RegraNegocioException("Produto não encontrado"));
 
+            if (item.getQuantidade() <= 0) {
+                throw new RegraNegocioException("Quantidade deve ser maior que zero");
+            }
+
             item.setProduto(produto);
 
             item.setPreco(produto.getPreco());
@@ -60,16 +67,18 @@ public class PedidoService {
             total += produto.getPreco() * item.getQuantidade();
 
             produto.setQuantidade(produto.getQuantidade() - item.getQuantidade());
+
             produtoRepository.save(produto);
         }
 
         pedido.setValorTotal(total);
+
         pedido.setData(LocalDate.now());
 
         return pedidoRepository.save(pedido);
     }
 
-    public PedidoResponseDTO converter(Pedidos pedido){
+    public PedidoResponseDTO converter(Pedido pedido){
         PedidoResponseDTO dto = new PedidoResponseDTO();
 
         dto.setId(pedido.getId());
@@ -82,7 +91,7 @@ public class PedidoService {
 
     public List<PedidoResponseDTO> listar(){
 
-        List<Pedidos> pedidos = pedidoRepository.findAll();
+        List<Pedido> pedidos = pedidoRepository.findAll();
 
         return pedidos.stream()
                 .map(this::converter)
@@ -90,7 +99,7 @@ public class PedidoService {
     }
 
     public PedidoResponseDTO buscarPorId(Long id){
-        Pedidos pedido = pedidoRepository.findById(id)
+        Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RegraNegocioException("Pedido não encontrado"));
 
         return converter(pedido);

@@ -1,7 +1,7 @@
 package com.pedro.salesapi.service;
 
 
-import com.pedro.salesapi.Exception.RegraNegocioException;
+import com.pedro.salesapi.exception.RegraNegocioException;
 import com.pedro.salesapi.entity.Produto;
 import com.pedro.salesapi.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,12 @@ public class ProdutoService {
     }
 
     public Produto salvar(Produto produto){
+
+        if(repository.existsByNome(produto.getNome())) {
+            throw new RegraNegocioException("Já existe produto com esse nome.");
+        }
         return repository.save(produto);
+
     }
 
     public List<Produto> listar(){
@@ -34,6 +39,12 @@ public class ProdutoService {
 
         Produto produtoBanco = repository.findById(id)
                 .orElseThrow(() -> new RegraNegocioException("Produto não encontrado"));
+
+        if(repository.existsByNome(produto.getNome())
+                && !produtoBanco.getNome().equals(produto.getNome())) {
+
+            throw new RegraNegocioException("Já existe produto com esse nome.");
+        }
 
         produtoBanco.setNome(produto.getNome());
         produtoBanco.setPreco(produto.getPreco());

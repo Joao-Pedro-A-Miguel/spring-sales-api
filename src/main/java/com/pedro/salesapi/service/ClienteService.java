@@ -1,8 +1,9 @@
 package com.pedro.salesapi.service;
 
-import com.pedro.salesapi.Exception.RegraNegocioException;
+import com.pedro.salesapi.dto.ClienteRequestDTO;
+import com.pedro.salesapi.dto.ClienteResponseDTO;
 import com.pedro.salesapi.entity.Cliente;
-import com.pedro.salesapi.entity.ClienteResponseDTO;
+import com.pedro.salesapi.exception.RegraNegocioException;
 import com.pedro.salesapi.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,59 +18,74 @@ public class ClienteService {
         this.repository = repository;
     }
 
-    public Cliente salvar(Cliente cliente){
+    public ClienteResponseDTO salvar(ClienteRequestDTO clienteDTO){
 
-        if (repository.existsByCpf(cliente.getCpf())) {
+        if (repository.existsByCpf(clienteDTO.getCpf())) {
             throw new RegraNegocioException("CPF já cadastrado");
         }
 
-        if (repository.existsByEmail(cliente.getEmail())) {
+        if (repository.existsByEmail(clienteDTO.getEmail())) {
             throw new RegraNegocioException("E-mail já cadastrado");
         }
 
-        if (cliente.getCpf().length() != 11){
-            throw new RegraNegocioException("CPF deve conter 11 digitos");
-        }
+        Cliente cliente = new Cliente();
 
-        if (!cliente.getEmail().contains("@")){
-            throw new RegraNegocioException("E-mail inválido");
-        }
+        cliente.setNome(clienteDTO.getNome());
+        cliente.setCpf(clienteDTO.getCpf());
+        cliente.setEmail(clienteDTO.getEmail().trim().toLowerCase());
 
-        return repository.save(cliente);
+        Cliente salvo = repository.save(cliente);
+
+        return converter(salvo);
     }
 
     public List<ClienteResponseDTO> listar(){
+
         return repository.findAll()
                 .stream()
-                .map(cliente -> new ClienteResponseDTO(
-                        cliente.getId(),
-                        cliente.getNome(),
-                        cliente.getEmail()
-                ))
+                .map(this::converter)
                 .toList();
     }
 
-    public Cliente buscarPorId(Long id){
-        return repository.findById(id)
-                .orElseThrow(() -> new RegraNegocioException("Cliente não encontrado"));
+    public ClienteResponseDTO buscarPorId(Long id){
+
+        Cliente cliente = repository.findById(id)
+                .orElseThrow(() ->
+                        new RegraNegocioException("Cliente não encontrado"));
+
+        return converter(cliente);
     }
 
-    public Cliente atualizar(Long id, Cliente cliente){
+    public ClienteResponseDTO atualizar(Long id, ClienteRequestDTO clienteDTO){
 
         Cliente clienteBanco = repository.findById(id)
-                .orElseThrow(() -> new RegraNegocioException("Cliente não encontrado"));
+                .orElseThrow(() ->
+                        new RegraNegocioException("Cliente não encontrado"));
 
-        clienteBanco.setNome(cliente.getNome());
-        clienteBanco.setCpf(cliente.getCpf());
-        clienteBanco.setEmail(cliente.getEmail());
+        clienteBanco.setNome(clienteDTO.getNome());
+        clienteBanco.setCpf(clienteDTO.getCpf());
+        clienteBanco.setEmail(clienteDTO.getEmail().trim().toLowerCase());
 
-        return repository.save(clienteBanco);
+        Cliente atualizado = repository.save(clienteBanco);
+
+        return converter(atualizado);
     }
 
     public void deletar(Long id){
+
         Cliente cliente = repository.findById(id)
-                .orElseThrow(() -> new RegraNegocioException("Cliente não encontrado"));
+                .orElseThrow(() ->
+                        new RegraNegocioException("Cliente não encontrado"));
 
         repository.delete(cliente);
+    }
+
+    private ClienteResponseDTO converter(Cliente cliente){
+
+        return new ClienteResponseDTO(
+                cliente.getId(),
+                cliente.getNome(),
+                cliente.getEmail()
+        );
     }
 }

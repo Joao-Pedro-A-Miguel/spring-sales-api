@@ -1,9 +1,10 @@
 package com.pedro.salesapi.controller;
 
-import com.pedro.salesapi.entity.Cliente;
-import com.pedro.salesapi.entity.ClienteResponseDTO;
+import com.pedro.salesapi.dto.ClienteRequestDTO;
+import com.pedro.salesapi.dto.ClienteResponseDTO;
 import com.pedro.salesapi.service.ClienteService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +21,11 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> salvar(@RequestBody @Valid Cliente cliente) {
-        return ResponseEntity.ok(service.salvar(cliente));
+    public ResponseEntity<ClienteResponseDTO> salvar(
+            @RequestBody @Valid ClienteRequestDTO clienteDTO) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.salvar(clienteDTO));
     }
 
     @GetMapping
@@ -30,21 +34,20 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarPorId(@PathVariable Long id){
+    public ResponseEntity<ClienteResponseDTO> buscarPorId( @PathVariable Long id) {
+
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> atualizar(@PathVariable Long id, @RequestBody Cliente cliente){
-        return ResponseEntity.ok(service.atualizar(id, cliente));
+    public ResponseEntity<ClienteResponseDTO> atualizar(@PathVariable Long id, @RequestBody @Valid ClienteRequestDTO clienteDTO) {
+
+        return ResponseEntity.ok(service.atualizar(id, clienteDTO));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }
-
 }
-
-

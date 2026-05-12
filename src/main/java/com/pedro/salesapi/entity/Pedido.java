@@ -7,8 +7,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Table(name = "pedidos")
 @Data
-public class Pedidos {
+public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

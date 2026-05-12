@@ -1,7 +1,10 @@
-package com.pedro.salesapi.entity;
+package com.pedro.salesapi.dto;
+
+import lombok.Data;
 
 import java.time.LocalDate;
 
+@Data
 public class PedidoResponseDTO {
 
     private Long id;
@@ -9,37 +12,4 @@ public class PedidoResponseDTO {
     private Double valorTotal;
     private String nomeCliente;
 
-    public PedidoResponseDTO() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-
-    public Double getValorTotal() {
-        return valorTotal;
-    }
-
-    public void setValorTotal(Double valorTotal) {
-        this.valorTotal = valorTotal;
-    }
-
-    public String getNomeCliente() {
-        return nomeCliente;
-    }
-
-    public void setNomeCliente(String nomeCliente) {
-        this.nomeCliente = nomeCliente;
-    }
 }

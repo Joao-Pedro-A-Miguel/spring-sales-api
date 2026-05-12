@@ -1,24 +1,15 @@
-package com.pedro.salesapi.entity;
+package com.pedro.salesapi.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-@Entity
 @Data
-@Table(name = "produtos")
-public class Produto {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true)
+public class ProdutoRequestDTO {
     @NotBlank(message = "Nome obrigatório")
     private String nome;
 
-    @Min(value = 1, message = "Preço deve ser maior que zero")
+    @Min(value = 1, message = "Preço inválido")
     private double preco;
 
     @Min(value = 0, message = "Quantidade inválida")
