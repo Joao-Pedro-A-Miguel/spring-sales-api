@@ -1,93 +1,170 @@
-# 🛒 Spring Sales API
+# Sales API
 
-API REST desenvolvida com **Spring Boot** para gerenciamento de um sistema de vendas, incluindo clientes, produtos, pedidos e itens de pedido.
+API REST desenvolvida com Java + Spring Boot para gerenciamento de vendas, clientes, produtos e pedidos.
 
----
-
-## Sobre o projeto
-
-Este projeto simula um sistema de vendas real, permitindo operações completas de CRUD e relacionamento entre entidades.
-
-A aplicação foi construída seguindo práticas de desenvolvimento backend, com foco em organização, escalabilidade e segurança.
+O projeto possui autenticação JWT, controle de acesso por perfil de usuário, validações, tratamento global de erros e integração com MySQL.
 
 ---
 
-## Funcionalidades
-
-✔ Cadastro de clientes
-✔ Cadastro de produtos
-✔ Criação de pedidos
-✔ Associação de itens aos pedidos
-✔ Cálculo automático do valor total do pedido
-✔ Relacionamentos entre entidades (JPA)
-✔ Tratamento de exceções
-
----
-
-## Arquitetura
-
-O projeto segue uma arquitetura em camadas:
-
-```
-controller → recebe requisições HTTP
-service → regras de negócio
-repository → acesso ao banco de dados
-entity → representação das tabelas
-```
-
----
-
-## Tecnologias utilizadas
+# Tecnologias utilizadas
 
 * Java 17
 * Spring Boot
+* Spring Security
+* JWT (JSON Web Token)
 * Spring Data JPA
 * Hibernate
 * MySQL
-* Docker
 * Maven
+* Swagger / OpenAPI
+* Lombok
 
 ---
 
-## Como rodar o projeto
+# Funcionalidades
 
-### 🔹 1. Clonar o repositório
+## Autenticação
+
+* Cadastro de usuários
+* Login com JWT
+* Senha criptografada com BCrypt
+* Controle de acesso por perfil
+
+## Clientes
+
+* Criar cliente
+* Listar clientes
+* Buscar cliente por ID
+* Atualizar cliente
+* Deletar cliente
+
+## Produtos
+
+* Criar produto
+* Listar produtos
+* Buscar produto por ID
+* Atualizar produto
+* Deletar produto
+
+## Pedidos
+
+* Criar pedido
+* Listar pedidos
+* Buscar pedido por ID
+* Cálculo automático do valor total
+* Desconto automático do estoque
+
+---
+
+# Controle de acesso
+
+## DONO
+
+Pode acessar:
+
+* /admin/**
+* /clientes/**
+* /produtos/**
+* /pedidos/**
+* /gerente/**
+
+## GERENTE
+
+Pode acessar:
+
+* /clientes/**
+* /produtos/**
+* /pedidos/**
+* /gerente/**
+
+## CLIENTE
+
+Usuário autenticado com acesso limitado.
+
+---
+
+# Segurança
+
+O projeto utiliza:
+
+* JWT para autenticação
+* BCrypt para criptografia de senha
+* Spring Security para autorização
+* Rotas protegidas por roles
+
+---
+
+# Estrutura do projeto
+
+```bash
+src/main/java/com/pedro/salesapi
+│
+├── config
+├── controller
+├── dto
+├── entity
+├── exception
+├── repository
+├── security
+├── service
+```
+
+---
+
+# Configuração do ambiente
+
+## Clone o projeto
 
 ```bash
 git clone https://github.com/Joao-Pedro-A-Miguel/spring-sales-api.git
-cd spring-sales-api
 ```
 
 ---
 
-### 🔹 2. Configurar variáveis de ambiente
+# Configuração do .env
 
-Crie um arquivo na raiz do projeto:
-
-```
-.env.properties
-```
-
-Adicione:
+Crie um arquivo `.env` na raiz do projeto:
 
 ```env
-DB_USER=root
-DB_PASSWORD=sua_senha_aqui
-DB_NAME=salesapi
 DB_PORT=3306
+DB_NAME=salesapi
+DB_USER=root
+DB_PASSWORD=sua_senha
+
+JWT_SECRET=MinhaChaveSuperSecretaMinhaChaveSuperSecreta123
 ```
 
 ---
 
-### 🔹 3. Subir o banco com Docker
+# application.properties
+
+```properties
+spring.application.name=salesapi
+
+spring.datasource.url=jdbc:mysql://localhost:${DB_PORT}/${DB_NAME}
+spring.datasource.username=${DB_USER}
+spring.datasource.password=${DB_PASSWORD}
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+spring.config.import=optional:file:.env[.properties]
+
+jwt.secret=${JWT_SECRET}
+```
+
+---
+
+# Como executar o projeto
+
+## Instalar dependências
 
 ```bash
-docker-compose up -d
+mvn clean install
 ```
 
----
-
-### 🔹 4. Rodar a aplicação
+## Executar aplicação
 
 ```bash
 mvn spring-boot:run
@@ -95,104 +172,117 @@ mvn spring-boot:run
 
 ---
 
-## Segurança
+# Swagger
 
-O projeto utiliza variáveis de ambiente para proteger dados sensíveis como credenciais do banco de dados.
+Após iniciar a aplicação:
 
-✔ O arquivo `.env.properties` está no `.gitignore`
-✔ Nenhuma senha é exposta no código
-
----
-
-## Endpoints da API
-
-### Clientes
-
-* `GET /clientes` → Lista todos os clientes
-* `POST /clientes` → Cadastra um novo cliente
-
----
-
-### Produtos
-
-* `GET /produtos` → Lista todos os produtos
-* `POST /produtos` → Cadastra um novo produto
-
----
-
-### Pedidos
-
-* `GET /pedidos` → Lista todos os pedidos
-* `POST /pedidos` → Cria um novo pedido
-
----
-
-### Itens do Pedido
-
-* Associação entre pedidos e produtos
-* Controle de quantidade e preço por item
-
----
-
-## Banco de dados
-
-O sistema utiliza MySQL com as seguintes entidades principais:
-
-* Cliente
-* Produto
-* Pedido
-* ItemPedido
-
-Relacionamentos:
-
-* Um cliente possui vários pedidos
-* Um pedido possui vários itens
-* Um item está associado a um produto
-
----
-
-## Estrutura do projeto
-
-```
-src/main/java/com/pedro/salesapi
-
-controller/
-service/
-repository/
-entity/
-dto/
+```bash
+http://localhost:8080/swagger-ui/index.html
 ```
 
 ---
 
-## Boas práticas aplicadas
+# Endpoints principais
 
-✔ Separação em camadas
-✔ Uso de DTOs
-✔ Relacionamentos bem definidos com JPA
-✔ Uso de variáveis de ambiente (.env)
-✔ Código limpo e organizado
+## Autenticação
 
----
+### Registrar usuário
 
-## Melhorias futuras
+```http
+POST /auth/register
+```
 
-* Validação com Bean Validation
-* Tratamento global de exceções (@ControllerAdvice)
-* Autenticação e autorização (JWT)
-* Documentação com Swagger
-* Deploy em nuvem (AWS / Railway / Render)
+### Login
+
+```http
+POST /auth/login
+```
 
 ---
 
-## Autor
+## Clientes
 
-**João Pedro**
+```http
+GET /clientes
+POST /clientes
+PUT /clientes/{id}
+DELETE /clientes/{id}
+```
 
 ---
 
-## Contato
+## Produtos
 
-* GitHub: https://github.com/Joao-Pedro-A-Miguel
+```http
+GET /produtos
+POST /produtos
+PUT /produtos/{id}
+DELETE /produtos/{id}
+```
 
 ---
+
+## Pedidos
+
+```http
+GET /pedidos
+POST /pedidos
+GET /pedidos/{id}
+```
+
+---
+
+# Validações implementadas
+
+* CPF inválido
+* Email inválido
+* Produto duplicado
+* Estoque insuficiente
+* Quantidade menor ou igual a zero
+* Pedido sem itens
+* Cliente inexistente
+* Produto inexistente
+
+---
+
+# Tratamento global de erros
+
+O projeto possui `GlobalExceptionHandler` para retornar mensagens amigáveis da API.
+
+Exemplo:
+
+```json
+{
+  "erro": "Produto não encontrado"
+}
+```
+
+---
+
+# Banco de dados
+
+Tabelas principais:
+
+* clientes
+* produtos
+* pedidos
+* itens_pedido
+* usuarios
+
+---
+
+# Melhorias futuras
+
+* Testes unitários
+* Paginação
+* Deploy
+* Docker
+* Refresh Token
+* Logs
+* CI/CD
+
+---
+
+# Autor
+
+João Pedro
