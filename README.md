@@ -127,7 +127,7 @@ Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 DB_PORT=3306
-DB_NAME=salesapi
+DB_NAME=nameDB
 DB_USER=root
 DB_PASSWORD=sua_senha
 
